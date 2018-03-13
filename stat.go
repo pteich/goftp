@@ -2,6 +2,7 @@ package goftp
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 )
 
@@ -15,6 +16,7 @@ func (ftp *FTP) Stat(path string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if !strings.HasPrefix(stat, StatusFileStatus) &&
 		!strings.HasPrefix(stat, StatusDirectoryStatus) &&
 		!strings.HasPrefix(stat, StatusSystemStatus) {
@@ -26,11 +28,9 @@ func (ftp *FTP) Stat(path string) ([]string, error) {
 	lines := []string{}
 	for _, line := range strings.Split(stat, "\n") {
 		if strings.HasPrefix(line, StatusFileStatus) {
-			continue
+			lines = append(lines, strings.TrimPrefix(strings.TrimSpace(line), fmt.Sprintf("%s ", StatusFileStatus)))
 		}
 		//fmt.Printf("%v\n", re.FindAllStringSubmatch(line, -1))
-		lines = append(lines, strings.TrimSpace(line))
-
 	}
 	// TODO(vbatts) parse this line for SystemTypeWindowsNT
 	//"213-status of /remfdata/all.zip:\r\n    09-12-15  04:07AM             37192705 all.zip\r\n213 End of status.\r\n"
