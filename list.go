@@ -28,7 +28,7 @@ type FtpFileInfo struct {
 	Raw   string
 }
 
-// List lists the path (or current directory)
+// List returns a slice of all files in the path
 func (ftp *FTP) List(path string) (files []string, err error) {
 	if err = ftp.Type(TypeASCII); err != nil {
 		return
@@ -98,12 +98,15 @@ func (ftp *FTP) List(path string) (files []string, err error) {
 	return
 }
 
+// ListParsed returns a slice of FtpFileInfo structs for every file
 func (ftp *FTP) ListParsed(path string) (info []FtpFileInfo, err error) {
 	files, err := ftp.List(path)
 	if err != nil {
 		return nil, err
 	}
 
+	// iterate over all files in path and try to parse data into a FtpFileInfo struct
+	// this works for most of modern FTP servers on Linux but may fail on others
 	for i := range files {
 		var size int64
 
