@@ -1,3 +1,5 @@
+Forked from https://github.com/dutchcoders/goftp and added a ListParsed function to return parsed structs of files in a specific path. But be aware that this is only works with modern FTP servers running on Linux and may fail with others.
+
 goftp
 =====
 
@@ -20,7 +22,7 @@ import (
     "os"
 
     "encoding/hex"
-    "gopkg.in/dutchcoders/goftp"
+    "github.com/pteich/goftp"
 )
 
 func main() {
